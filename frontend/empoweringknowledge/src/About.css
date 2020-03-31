@@ -1,0 +1,9 @@
+.main :after{
+    clear: both;
+    display: block;
+}
+
+.cards :after{
+    clear: both;
+    display: block;
+}

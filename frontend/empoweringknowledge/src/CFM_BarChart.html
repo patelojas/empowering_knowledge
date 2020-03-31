@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!-- For a "top 10 (or 20, or however many) donation recipients" bar chart
+
+Just data collection & sorting done currently, will finish tomorrow
+-->
+
+<body>
+  
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<script>
+
+let num_to_display = 10;
+let bar_width = 130;
+
+var margin = {top: 30, right: 20, bottom: 30, left: 110};
+var width = num_to_display * bar_width;
+var height = 650;
+
+var chart = d3.select("body")
+	.append("svg")
+		.attr('width', width + margin.left + margin.right)
+		.attr('height', height + margin.top + margin.bottom);
+
+var barLabel = function(rep) { return rep['name']; };
+var barValue = function(rep) { return rep['total_donations']; };
+
+var xScale = d3.scale.ordinal().domain(d3.range(0, num_to_display)).rangeBands([0, num_to_display * bar_width]);
+var x = function(d, i) { return xScale(i); };
+var xText = function(d, i) { return x(d, i) + xScale.rangeBand() / 2; };
+var y = d3.scale.linear().domain([650000, 0]).range([0, 650]);
+
+var gridContainer = chart.append('g')
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+gridContainer.selectAll("text").data(y.ticks(10)).enter().append("text")
+	.attr("dx", -5)
+	.attr("y", y)
+	.attr("text-anchor", "end")
+	.text(String);
+
+gridContainer.selectAll("line").data(y.ticks(10)).enter().append("line")
+	.attr("x1", 0)
+	.attr("x2", xScale.rangeExtent()[1] + margin.left)
+	.attr("y1", y)
+	.attr("y2", y)
+	.style("stroke", "#ccc");
+
+gridContainer.append("text")
+    .attr("x", height / 2 - 70)
+    .attr("y", -1 * (margin.left / 2) + 150)
+    .attr("transform", "rotate(90)")
+    .text("Total donations received");
+
+
+async function getReps() {
+	var reps = []; // array of {"name": "<name>", "total_donations": <total_donations>,
+					// "party": <party>}
+
+	let num_pages = 44;
+	for (var pg = 1; pg <= num_pages; pg++) {
+		var url = "https://www.congressfor.me/api/congressmen?page=" + pg;
+		await fetch(url)
+		    .then(res => res.json())
+		    .then((data) => {
+		    	let rep_list = data.objects;
+		    	rep_list.forEach(function(r) {
+		    		let rep_name = r.firstname + ' ' + r.lastname;
+		    		let total_donations = 0;
+		    		r.congressdonor.forEach(function(d) {
+		    			total_donations += d.amount;
+		    		});
+		    		let party = r.party;
+		    		reps[reps.length] = {"name": rep_name, "total_donations": total_donations, "party": party};
+		    	});
+		    })
+		    .catch(console.log);
+	}
+	reps.sort(function(a, b){
+		return b.total_donations - a.total_donations
+	});
+	return reps;
+}
+
+
+getReps()
+	.then((reps) => {
+		console.log(reps)
+		reps = reps.slice(0, num_to_display);
+		var labelsContainer = chart.append('g')
+			.attr('transform', 'translate(' + 60 + ',' + (margin.top - 5) + ')'); 
+		labelsContainer.selectAll('text').data(reps).enter().append('text')
+			.attr('x', xText)
+			.attr('y', height + margin.top)
+			.attr('stroke', 'none')
+			.attr('fill', 'black')
+			.attr("dx", ".35em")
+			.attr('text-anchor', 'start')
+			.text(barLabel);
+
+		var barsContainer = chart.append('g')
+			.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'); 
+		barsContainer.selectAll("rect").data(reps).enter().append("rect")
+			.attr('x', x)
+			.attr('y', function(d) { return y(barValue(d)); })
+			.attr('width', xScale.rangeBand())
+			.attr('height', function(d) { return y(0) - y(barValue(d)); })
+			.attr('stroke', 'white')
+			.attr('fill', function(d) { return d.party == "Democrat" ? "#3858f5" : "#eb2626"});
+		  
+
+		barsContainer.selectAll("text").data(reps).enter().append("text")
+			.attr("x", xText)
+			.attr("y", function(d) { return y(barValue(d)); })
+			.attr("dx", 0) 
+			.attr("dy", -5) 
+			.attr("text-anchor", "middle") 
+			.attr("fill", "black")
+			.attr("stroke", "none")
+			.text(function(d) { return barValue(d); });
+
+		barsContainer.append("line")
+			.attr("x1", -3)
+			.attr("x2", xScale.rangeExtent()[1] + margin.left)
+			.attr("y1", height)
+			.attr("y2", height)
+			.style("stroke", "#000");
+	})
+
+</script>
+</body>

@@ -1,0 +1,46 @@
+{
+  "name": "empoweringknowledge",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "async-wait-until": "^1.2.4",
+    "bootstrap": "^4.3.1",
+    "d3": "^5.14.2",
+    "mocha": "^6.2.2",
+    "prop-types": "^15.7.2",
+    "react": "^16.10.1",
+    "react-dom": "^16.10.1",
+    "react-highlight-words": "^0.16.0",
+    "react-router-dom": "^5.1.1",
+    "react-scripts": "3.1.2",
+    "react-tabs": "^3.0.0",
+    "react-twitter-widgets": "^1.7.1",
+    "reactstrap": "^8.0.1"
+  },
+  "scripts": {
+    "deploy": "aws s3 sync build/ s3://empoweringknowledge.me --acl public-read",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1"
+  }
+}

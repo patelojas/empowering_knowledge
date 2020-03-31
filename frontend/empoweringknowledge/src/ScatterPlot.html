@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!-- Referenced this example code for help:
+http://bl.ocks.org/d3noob/38744a17f9c0141bcd04
+
+Can be improved with axis labels and(?) point labels, will add tomorrow
+-->
+
+<meta charset="utf-8">
+<style>
+
+body { font: 12px Arial;}
+
+path {
+    fill: none;
+    stroke: black;
+    stroke-width: 1;
+}
+
+.axis {
+    font: 10px Arial;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+  
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<script>
+
+var margin = {top: 30, right: 50, bottom: 50, left: 90};
+var width = 800;
+var height = 500;
+
+var svg = d3.select("body")
+    .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+        .attr("transform", 
+              "translate(" + margin.left + "," + margin.top + ")");
+
+var x = d3.scale.linear().domain([0, 40000000]).range([0, width]);
+var y = d3.scale.linear().domain([40000, 85000]).range([height, 0]);
+
+var xAxis = d3.svg.axis().scale(x)
+    .orient("bottom").ticks(8);
+var yAxis = d3.svg.axis().scale(y)
+    .orient("left").ticks(9);
+
+svg.append("text")
+    .attr("x", height / 2 - 70)
+    .attr("y", -1 * (margin.left / 2) + 110)
+    .attr("transform", "rotate(90)")
+    .text("Median Household Income");
+
+svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", margin.top + height + 15)
+    .text("Population");
+
+
+async function getData() {
+    var graph_data = {};
+
+    let num_pages = 6;
+    for (var pg = 1; pg <= num_pages; pg++) {
+        await fetch('https://api.empoweringknowledge.me/api/states?page=' + pg)
+            .then(res => res.json())
+            .then((data) => {
+                let states = data['objects'];
+                states.forEach(function(s) {
+                    let state_name = s.name;
+                    graph_data[state_name] = {};
+                    graph_data[state_name].population = +s.population;
+                    graph_data[state_name].income = +s.median_hh_income;
+                    graph_data[state_name].party = s.dominant_party;
+                });
+            })
+    }
+
+    return graph_data;
+}
+
+
+getData()
+    .then((graph_data) => {
+        let final_data = d3.entries(graph_data);
+
+        console.log(final_data);
+
+        svg.selectAll("dot")
+            .data(final_data).enter()
+                .append("circle")
+                    .attr("r", 3.5)
+                    .attr("cx", function(d) { return x(d.value.population); })
+                    .attr("cy", function(d) { return y(d.value.income); })
+                    .attr("fill", function(d) { return d.value.party == "Democratic" ? "#3858f5" : "#eb2626" });
+
+        svg.selectAll("text")
+            .data(final_data).enter()
+                .append("text")
+                    .attr("x", function(d) { return x(d.value.population); })
+                    .attr("y", function(d) { return y(d.value.income); })
+                    .attr("dx", 6) 
+                    .attr("dy", 4) 
+                    .attr("text-anchor", "start") 
+                    .attr("fill", "black")
+                    .attr("stroke", "none")
+                    .text(function(d) { return d.key; });
+
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis);
+    })
+
+ </script>
+ </body>

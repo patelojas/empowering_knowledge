@@ -1,0 +1,402 @@
+@startuml
+
+class Bills {
+    bill_id           varchar(16)    not null unique PK
+    bill_type                  varchar(30)      not null
+	title 			           varchar(2500)    not null
+	short_title                varchar(1000)    null
+	sponsor_id                 varchar(30)      not null FK
+	introduced_date            varchar(30)      not null
+	cosponsors_by_party_D      Integer          null
+	cosponsors_by_party_R      Integer          null
+	committees                 varchar(2500)    not null
+	active                     tinyint(1)       not null
+	congressdotgov_url         varchar(100)     null
+	govtrack_url               varchar(100)     null
+	house_passage              varchar(75)      null
+	senate_passage             varchar(75)      null
+	summary                    varchar(15000)   not null
+	summary_short              varchar(10000)   null
+}
+
+class State {
+	name      varchar(16) not null unique PK
+	population int(11) not null
+	median_hh_income int(11) not null
+	dominant_party varchar(20) null
+	primary_energy_source1 varchar(40) null
+	primary_energy_source2 varchar(40) null
+	primary_energy_source3 varchar(40) null
+	current_politicians varchar(40) null
+	bills_sponsored varchar(40) null
+
+}
+
+class CongressMember {
+	member_id                   varchar(16)      not null unique PK
+	first_name                  varchar(16)      not null
+	last_name                   varchar(16)      not null
+	date_of_birth               varchar(10)      not null
+	party                       varchar(1)       not null
+	state_abr					varchar(2)		 not null
+	state                       varchar(30)      not null
+	district                    varchar(20)      not null
+	votes_with_party_pct        varchar(10)      null
+	office                      varchar(125)     null
+	twitter_account             varchar(30)      null
+	title                       varchar(30)      null
+	facebook_account            varchar(50)      null
+	phone                       varchar(12)      null
+	url                         varchar(100)     null
+	cspan_id                    varchar(50)      null
+	image_url					varchar(250)	 null
+}	
+
+class Biomass {
+        state_name varchar(16) not null unique PK
+	data_1993 int null 
+	data_1994 int null
+	data_1995 int null
+	data_1996 int null
+	data_1997 int null
+	data_1998 int null
+	data_1999 int null
+	data_2000 int null
+	data_2001 int null
+	data_2002 int null
+	data_2003 int null
+	data_2004 int null
+	data_2005 int null
+	data_2006 int null
+	data_2007 int null
+	data_2008 int null
+	data_2009 int null
+	data_2010 int null
+	data_2011 int null
+	data_2012 int null
+	data_2013 int null
+	data_2014 int null
+	data_2015 int null
+	data_2016 int null
+	data_2017 int null
+}
+
+class Coal {
+     state_name varchar(16) not null unique PK
+	data_1993 int null 
+	data_1994 int null
+	data_1995 int null
+	data_1996 int null
+	data_1997 int null
+	data_1998 int null
+	data_1999 int null
+	data_2000 int null
+	data_2001 int null
+	data_2002 int null
+	data_2003 int null
+	data_2004 int null
+	data_2005 int null
+	data_2006 int null
+	data_2007 int null
+	data_2008 int null
+	data_2009 int null
+	data_2010 int null
+	data_2011 int null
+	data_2012 int null
+	data_2013 int null
+	data_2014 int null
+	data_2015 int null
+	data_2016 int null
+	data_2017 int null
+}
+
+class Geothermal {
+
+	state_name varchar(16) not null unique PK
+	data_1993 int null 
+	data_1994 int null
+	data_1995 int null
+	data_1996 int null
+	data_1997 int null
+	data_1998 int null
+	data_1999 int null
+	data_2000 int null
+	data_2001 int null
+	data_2002 int null
+	data_2003 int null
+	data_2004 int null
+	data_2005 int null
+	data_2006 int null
+	data_2007 int null
+	data_2008 int null
+	data_2009 int null
+	data_2010 int null
+	data_2011 int null
+	data_2012 int null
+	data_2013 int null
+	data_2014 int null
+	data_2015 int null
+	data_2016 int null
+	data_2017 int null
+	
+}
+
+class Hydroelectricity {
+	
+	state_name varchar(16) not null unique PK
+	data_1993 int null 
+	data_1994 int null
+	data_1995 int null
+	data_1996 int null
+	data_1997 int null
+	data_1998 int null
+	data_1999 int null
+	data_2000 int null
+	data_2001 int null
+	data_2002 int null
+	data_2003 int null
+	data_2004 int null
+	data_2005 int null
+	data_2006 int null
+	data_2007 int null
+	data_2008 int null
+	data_2009 int null
+	data_2010 int null
+	data_2011 int null
+	data_2012 int null
+	data_2013 int null
+	data_2014 int null
+	data_2015 int null
+	data_2016 int null
+	data_2017 int null
+}
+
+class NaturalGas {
+	
+	state_name varchar(16) not null unique PK
+	data_1993 int(11) null 
+	data_1993 int null 
+	data_1994 int null
+	data_1995 int null
+	data_1996 int null
+	data_1997 int null
+	data_1998 int null
+	data_1999 int null
+	data_2000 int null
+	data_2001 int null
+	data_2002 int null
+	data_2003 int null
+	data_2004 int null
+	data_2005 int null
+	data_2006 int null
+	data_2007 int null
+	data_2008 int null
+	data_2009 int null
+	data_2010 int null
+	data_2011 int null
+	data_2012 int null
+	data_2013 int null
+	data_2014 int null
+	data_2015 int null
+	data_2016 int null
+	data_2017 int null
+}
+
+class NuclearPower {
+	
+	state_name varchar(16) not null unique PK
+	data_1993 int null 
+	data_1994 int null
+	data_1995 int null
+	data_1996 int null
+	data_1997 int null
+	data_1998 int null
+	data_1999 int null
+	data_2000 int null
+	data_2001 int null
+	data_2002 int null
+	data_2003 int null
+	data_2004 int null
+	data_2005 int null
+	data_2006 int null
+	data_2007 int null
+	data_2008 int null
+	data_2009 int null
+	data_2010 int null
+	data_2011 int null
+	data_2012 int null
+	data_2013 int null
+	data_2014 int null
+	data_2015 int null
+	data_2016 int null
+	data_2017 int null
+}
+
+class Petroleum {
+	
+	state_name varchar(16) not null unique PK
+	data_1993 int null 
+	data_1994 int null
+	data_1995 int null
+	data_1996 int null
+	data_1997 int null
+	data_1998 int null
+	data_1999 int null
+	data_2000 int null
+	data_2001 int null
+	data_2002 int null
+	data_2003 int null
+	data_2004 int null
+	data_2005 int null
+	data_2006 int null
+	data_2007 int null
+	data_2008 int null
+	data_2009 int null
+	data_2010 int null
+	data_2011 int null
+	data_2012 int null
+	data_2013 int null
+	data_2014 int null
+	data_2015 int null
+	data_2016 int null
+	data_2017 int null
+}
+
+class SolarEnergy {
+	
+	state_name varchar(16) not null unique PK
+	data_1993 int null 
+	data_1994 int null
+	data_1995 int null
+	data_1996 int null
+	data_1997 int null
+	data_1998 int null
+	data_1999 int null
+	data_2000 int null
+	data_2001 int null
+	data_2002 int null
+	data_2003 int null
+	data_2004 int null
+	data_2005 int null
+	data_2006 int null
+	data_2007 int null
+	data_2008 int null
+	data_2009 int null
+	data_2010 int null
+	data_2011 int null
+	data_2012 int null
+	data_2013 int null
+	data_2014 int null
+	data_2015 int null
+	data_2016 int null
+	data_2017 int null
+}
+
+class WindEnergy {
+	
+	state_name varchar(16) not null unique PK
+	data_1993 int null 
+	data_1994 int null
+	data_1995 int null
+	data_1996 int null
+	data_1997 int null
+	data_1998 int null
+	data_1999 int null
+	data_2000 int null
+	data_2001 int null
+	data_2002 int null
+	data_2003 int null
+	data_2004 int null
+	data_2005 int null
+	data_2006 int null
+	data_2007 int null
+	data_2008 int null
+	data_2009 int null
+	data_2010 int null
+	data_2011 int null
+	data_2012 int null
+	data_2013 int null
+	data_2014 int null
+	data_2015 int null
+	data_2016 int null
+	data_2017 int null
+}
+
+class WoodAndWaste {
+	
+	state_name varchar(16) not null unique PK
+	data_1993 int null 
+	data_1994 int null
+	data_1995 int null
+	data_1996 int null
+	data_1997 int null
+	data_1998 int null
+	data_1999 int null
+	data_2000 int null
+	data_2001 int null
+	data_2002 int null
+	data_2003 int null
+	data_2004 int null
+	data_2005 int null
+	data_2006 int null
+	data_2007 int null
+	data_2008 int null
+	data_2009 int null
+	data_2010 int null
+	data_2011 int null
+	data_2012 int null
+	data_2013 int null
+	data_2014 int null
+	data_2015 int null
+	data_2016 int null
+	data_2017 int null
+}
+
+class Cosponsors {
+	
+	id int(11) not null unique PK
+	bill_id varchar(16) not null
+	cosponsor_id varchar(16) not null
+}
+
+class Congresses {
+	
+	member_id varchar(16) not null unique PK
+	chamber varchar(6) null
+	con_num int(11) null
+	id int(11) null
+}
+
+Congresses -- CongressMember
+
+Cosponsors o--o CongressMember
+Cosponsors o--o Bills
+
+NuclearPower -[hidden]-> Biomass
+Petroleum -[hidden]-> Coal
+WoodAndWaste -[hidden]-> Geothermal
+SolarEnergy -[hidden]-> Hydroelectricity
+WindEnergy -[hidden]-> NaturalGas
+
+NaturalGas -[hidden]> Hydroelectricity
+Hydroelectricity -[hidden]> Biomass
+Biomass -[hidden]> Coal
+Coal -[hidden]> Geothermal
+
+State -[hidden]> CongressMember
+CongressMember -[hidden]> Bills
+
+State o-- Geothermal
+State o-- WoodAndWaste
+State o-- Coal
+State o-- Biomass
+State o-- SolarEnergy
+State o-- WindEnergy
+State o-- NaturalGas
+State o-- NuclearPower
+State o-- Petroleum
+State o-- Hydroelectricity
+State o--o CongressMember
+CongressMember o-- Bills
+
+@endnuml
